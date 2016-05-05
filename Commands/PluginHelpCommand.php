@@ -14,7 +14,7 @@ use Terminus\Utils;
 class PluginHelpCommand extends TerminusCommand {
 
   /**
-   * Advanced help for plugins.
+   * Advanced help for plugins
    *
    * @param array $options Options to construct the command object
    * @return PluginHelpCommand
@@ -24,13 +24,22 @@ class PluginHelpCommand extends TerminusCommand {
   }
 
   /**
-   * Advanced help for plugins.
+   * Advanced help for plugins
    *
    * @subcommand help
+   *
+   * [--browse]
+   * : Open help in the default browser
+   *
+   * [--print]
+   * : Display help in the terminal window
+   *
+   * @param array $args Array of plugin names
+   * @param array $assoc_args Array of display options
    */
   public function help($args, $assoc_args) {
     if (empty($args)) {
-      $message = "Usage: terminus plugin help [--browse | --print] plugin-name-1 [plugin-name-2] ...";
+      $message = "Usage: terminus plugin help plugin-name-1 [plugin-name-2] ... [--browse | --print]";
       $this->failure($message);
     }
 
