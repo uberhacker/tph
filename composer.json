@@ -1,0 +1,9 @@
+{
+  "name": "uberhacker/tph",
+  "description": "Terminus plugin to provide advanced help for plugins",
+  "homepage": "https://github.com/uberhacker/tph",
+  "license": "MIT",
+  "require": {
+    "php": ">=5.4"
+  },
+}
