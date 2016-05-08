@@ -46,7 +46,8 @@ class PluginHelpCommand extends TerminusCommand {
     if (empty($assoc_args)) {
       $assoc_args = array('browse' => 1);
     }
-    $assoc_arg = array_pop(array_keys($assoc_args));
+    $keys = array_keys($assoc_args);
+    $assoc_arg = array_pop($keys);
     if (!in_array($assoc_arg, array('browse', 'print'))) {
       $message = "Invalid associative argument --$assoc_arg.";
       $this->failure($message);
@@ -82,11 +83,12 @@ class PluginHelpCommand extends TerminusCommand {
         $git_dir = $plugin . $slash . '.git';
         if (is_dir("$plugin") && is_dir("$git_dir")) {
           $readme = '';
-          exec("cd \"$plugin\" && git remote -v | xargs", $output);
+          exec("cd \"$plugin\" && git remote -v", $output);
           foreach ($output as $line) {
-            $parts = explode(' ', $line);
+            $parts = explode("\t", $line);
             if (isset($parts[1])) {
-              $repo = $parts[1];
+              $repo = explode(' ', $parts[1]);
+              $repo = $repo[0];
               if (substr($repo, -4) == '.git') {
                 $repo = substr($repo, 0, strlen($repo) - 4);
               }
