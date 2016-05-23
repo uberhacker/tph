@@ -22,3 +22,7 @@ Get advanced help for the plugin awesome-plugin and open in the default browser
 $ terminus plugin help awesome-plugin --print
 ```
 Get advanced help for the plugin awesome-plugin and display in the terminal window
+```
+$ terminus plugin help
+```
+Get advanced help if within the plugin directory
