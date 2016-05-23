@@ -38,9 +38,36 @@ class PluginHelpCommand extends TerminusCommand {
    * @param array $assoc_args Array of display options
    */
   public function help($args, $assoc_args) {
+    $plugins_dir = $this->getPluginDir();
+    $windows = Utils\isWindows();
+    if ($windows) {
+      $slash = '\\\\';
+    } else {
+      $slash = '/';
+    }
     if (empty($args)) {
-      $message = "Usage: terminus plugin help plugin-name-1 [plugin-name-2] ... [--browse | --print]";
-      $this->failure($message);
+      $subs = '';
+      $cwd = getcwd();
+      $plugin_exists = false;
+      $pos = strlen($plugins_dir);
+      if ($pos < strlen($cwd)) {
+        $subs = substr($cwd, $pos);
+      }
+      if ($subs) {
+        $parts = explode($slash, $subs);
+        if (isset($parts[0])) {
+          $plugin = $parts[0];
+          $plugin_dir = $plugins_dir . $plugin;
+          if (is_dir($plugin_dir)) {
+            $args[0] = $plugin;
+            $plugin_exists = true;
+          }
+        }
+      }
+      if (!$plugin_exists) {
+        $message = "Usage: terminus plugin help plugin-name-1 [plugin-name-2] ... [--browse | --print]";
+        $this->failure($message);
+      }
     }
 
     if (empty($assoc_args)) {
@@ -66,18 +93,11 @@ class PluginHelpCommand extends TerminusCommand {
       default:
         $this->failure('Operating system not supported.');
     }
-    $plugins_dir = $this->getPluginDir();
     exec("ls \"$plugins_dir\"", $output);
     if (empty($output[0])) {
       $message = "No plugins installed.";
       $this->log()->notice($message);
     } else {
-      $windows = Utils\isWindows();
-      if ($windows) {
-        $slash = '\\\\';
-      } else {
-        $slash = '/';
-      }
       foreach ($args as $plugin) {
         $plugin = $plugins_dir . $plugin;
         $git_dir = $plugin . $slash . '.git';
